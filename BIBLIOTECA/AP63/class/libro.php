@@ -18,4 +18,20 @@ class Libro extends Publicacion {
     public function setPaginas($paginas){
         $this->paginas = $paginas; 
     }        
+
+    // Convierte un objeto a un array
+    public function toArray(): array {
+        return [
+            'titulo' => $this->titulo,
+            'autor' => $this->autor,
+            'año' => $this->año,
+            'paginas' => $this->paginas
+        ];
+    }
+
+    // Devuelve un objeto de un array
+    public static function fromArray(array $data): Libro {
+        return new Libro($data['titulo'], $data['autor'], $data['año'], $data['paginas']);
+    }
+
 }
