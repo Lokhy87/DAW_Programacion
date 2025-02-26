@@ -5,9 +5,9 @@ class Publicacion {
     protected $año;
 
     function __construct($titulo, $autor, $año){
-        $this->setTitulo($titulo);
-        $this->setAutor($autor); 
-        $this->setAño($año);
+        $this->titulo = $titulo;
+        $this->autor = $autor; 
+        $this->año = $año;
     }
 
     // Getters
