@@ -35,4 +35,8 @@ class Publicacion {
     public function setAño($año){
         $this->año = $año;
     }
+
+    public function print(){
+        echo "Titulo: $this->titulo; Autor: $this->autor; Año: $this->año; ";
+    }
 }

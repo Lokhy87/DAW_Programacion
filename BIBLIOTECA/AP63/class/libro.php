@@ -34,4 +34,9 @@ class Libro extends Publicacion {
         return new Libro($data['titulo'], $data['autor'], $data['año'], $data['paginas']);
     }
 
+    public function print() {
+        parent::print();
+        echo "Tipo: $this->paginas<br>";
+    }
+
 }
