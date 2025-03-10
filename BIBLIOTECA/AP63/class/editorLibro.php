@@ -11,6 +11,14 @@ class EditorLibros {
     public function __construct() {
         $this->cargarPublicacion();
     }
+
+    public function getLibros() {
+        return $this->libros;
+    }
+    public function getRevistas() {
+        return $this->revistas;
+    }
+
     
     // Comprobar que este datos.json y hace proceso desde json hasta array de objetos
     private function cargarPublicacion() {
@@ -30,18 +38,36 @@ class EditorLibros {
         }
     }
 
-    // Agregar libros
+    // Agregar publicacion
     public function agregarPublicacion($titulo, $autor, $año, $var) {
         if (gettype($var) == "integer") {
             $libro = new Libro($titulo, $autor, $año, $var);
             $this->libros[] = $libro;
-            $this->guardarLibros();
+            //$this->guardarLibros();
         } else {
             $revista = new Revista($titulo, $autor, $año, $var);
             $this->revistas[] = $revista;
-            $this->guardarRevistas();
         }
+        $this->guardarPublicaciones();
+    }
 
+
+    // Guardar todas las publicaciones (libros y revistas) en el archivo JSON
+    private function guardarPublicaciones() {
+        $publicaciones = [];
+    
+        // Agregar libros al array de publicaciones
+        foreach ($this->libros as $libro) {
+            $publicaciones[] = $libro->toArray();
+        }
+    
+        // Agregar revistas al array de publicaciones
+        foreach ($this->revistas as $revista) {
+            $publicaciones[] = $revista->toArray();
+        }
+    
+        // Guardar en el archivo JSON
+        file_put_contents($this->filePath, json_encode($publicaciones, JSON_PRETTY_PRINT));
     }
 
     public function imprimirPublicaciones() {
@@ -53,7 +79,6 @@ class EditorLibros {
         }
     }
 
-
     // Leer libros
     public function leerLibros(): array {
         return $this->libros;
@@ -63,40 +88,40 @@ class EditorLibros {
         if (isset($this->libros[$indice])){
             unset($this->libros[$indice]);
             $this->libros = array_values($this->libros);
-            $this->guardarLibros();
+            $this->guardarPublicaciones();
         }
   
     }
 
     public function eliminarRevista($indice){
-        if (isset($this->libros[$indice])){
-            unset($this->libros[$indice]);
-            $this->libros = array_values($this->libros);
-            $this->guardarRevistas();
+        if (isset($this->revistas[$indice])){
+            unset($this->revistas[$indice]);
+            $this->revistas = array_values($this->revistas);
+            $this->guardarPublicaciones();
         }
     }
 
     // Proceso de array de objetos a json
-    private function guardarLibros() {
-        $jsonBiblio = [];
-        foreach ($this->libros as $object) {
-            $arrayLibro = $object->toArray();
-            $jsonBiblio[] = $arrayLibro;
-        }
-        $jsonBiblio = json_encode($jsonBiblio, JSON_PRETTY_PRINT);
-        file_put_contents($this->filePath, $jsonBiblio);
-    }
+    // private function guardarLibros() {
+    //     $jsonBiblio = [];
+    //     foreach ($this->libros as $object) {
+    //         $arrayLibro = $object->toArray();
+    //         $jsonBiblio[] = $arrayLibro;
+    //     }
+    //     $jsonBiblio = json_encode($jsonBiblio, JSON_PRETTY_PRINT);
+    //     file_put_contents($this->filePath, $jsonBiblio);
+    // }
 
-    public function guardarRevistas() {
-        $jsonBiblio = [];
-        foreach ($this->revistas as $object) {
-            $arrayRevista = $object->toArray();
-            $jsonBiblio[] = $arrayRevista;
-        }
-        $jsonBiblio = json_encode($jsonBiblio, JSON_PRETTY_PRINT);
-        file_put_contents($this->filePath, $jsonBiblio);
+    // public function guardarRevistas() {
+    //     $jsonBiblio = [];
+    //     foreach ($this->revistas as $object) {
+    //         $arrayRevista = $object->toArray();
+    //         $jsonBiblio[] = $arrayRevista;
+    //     }
+    //     $jsonBiblio = json_encode($jsonBiblio, JSON_PRETTY_PRINT);
+    //     file_put_contents($this->filePath, $jsonBiblio);
 
-    }
+    // }
 
 }
 
