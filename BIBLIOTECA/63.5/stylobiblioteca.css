@@ -1,0 +1,52 @@
+/* General */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 10;
+}
+
+/* Encabezado */
+h1 {
+    text-align: center;
+    font-size: 30px;
+    color: #2c3e50;
+    margin: 20px;
+    background: yellow;
+}
+h2 {
+    text-align: left;
+    font-size: 20;
+    color: black;
+    margin: 20px;
+    padding-left: 20px;
+    background: red;
+}
+form {
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    background: #bbd0e6;
+}
+label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+button {
+    background-color: #4CAF50;  
+    color: white; 
+    padding: 5px 5px;  
+    border: none;  
+    border-radius: 4px;  
+    font-size: 16px;  
+    cursor: pointer;
+}
+p {
+    font-size: 16px;
+    color: #e74c3c;
+    text-align: center;
+}
