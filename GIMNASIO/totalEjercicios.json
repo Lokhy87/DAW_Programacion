@@ -1,0 +1,37 @@
+[
+    {
+        "nombre": "Press de banca",
+        "grupo_muscular": "Pectoral",
+        "tipo_movimiento": "Empuje",
+        "entrenamiento": "Hipertrofia",
+        "objetivo": "Aumentar volumen muscular"
+    },
+    {
+        "nombre": "Pres militar",
+        "grupo_muscular": "Hombro",
+        "tipo_movimiento": "Empuje",
+        "entrenamiento": "Hipertrofia",
+        "objetivo": "Aumentar volumen muscular"
+    },
+    {
+        "nombre": "Burpees",
+        "grupo_muscular": "Global",
+        "tipo_movimiento": "Empuje y salto",
+        "entrenamiento": "Metabolico",
+        "objetivo": "Perdida de grasa"
+    },
+    {
+        "nombre": "Pres militar",
+        "grupo_muscular": "Hombro",
+        "tipo_movimiento": "Empuje",
+        "entrenamiento": "Hipertrofia",
+        "objetivo": "Aumentar volumen muscular"
+    },
+    {
+        "nombre": "Burpees",
+        "grupo_muscular": "Global",
+        "tipo_movimiento": "Empuje y salto",
+        "entrenamiento": "Metabolico",
+        "objetivo": "Perdida de grasa"
+    }
+]
