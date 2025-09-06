@@ -1,26 +1,116 @@
 <?php
 require_once("./class/editorLibro.php");
 
-// $libro1 = new Libro("La caida de los gigantes", "Ken Follet", 2010, 1024);
-// $libro2 = new Libro("Harry potter y el prisionero de Azkaban", "J. K. Rowling", 1999, 384);
-// $libro3 = new Libro("Los hombres que no amaban a las mujeres", "Stieg Larsson", 2005, 672);
+$biblioteca = new EditorLibros();
 
-// $revista1 = new Revista("National Geographic", "Varios autores", 2023, 100, "Ciencia");
-// $revista2 = new Revista("TIME", "Varios autores", 2024, 80, "Noticias");
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'add':
+                $titulo = $_POST['Titulo'] ?? '';
+                $autor = $_POST['Autor'] ?? '';
+                $año = (int)($_POST['Año'] ?? 0);
+                $var = $_POST['var'] ?? '';
 
-// // Imprimir detalles de los libros
-// echo "Libro 1: " . $libro1->getTitulo() . " de " . $libro1->getAutor() . " (" . $libro1->getAño() . "), " . $libro1->getPaginas() . " páginas.<br>";
-// echo "Libro 2: " . $libro2->getTitulo() . " de " . $libro2->getAutor() . " (" . $libro2->getAño() . "), " . $libro2->getPaginas() . " páginas.<br>";
-// echo "Libro 3: " . $libro3->getTitulo() . " de " . $libro3->getAutor() . " (" . $libro3->getAño() . "), " . $libro3->getPaginas() . " páginas.<br><br>";
+                if (!empty($titulo) && !empty($autor) && !empty($var)) {
+                    // Determinar si es un libro o una revista
+                    if (is_numeric($var)) {
+                        // Es un libro (var es un número)
+                        $paginas = (int)$var;
+                        $biblioteca->agregarPublicacion($titulo, $autor, $año, $paginas);
+                        echo "<p>Libro '$titulo' agregado correctamente.</p>";
+                    } else {
+                        // Es una revista (var es un string)
+                        $tematica = $var;
+                        $biblioteca->agregarPublicacion($titulo, $autor, $año, $tematica);
+                        echo "<p>Revista '$titulo' agregada correctamente.</p>";
+                    }
+                } else {
+                    echo "<p>Por favor, completa todos los campos.</p>";
+                }
+                break;
+            case 'delete':
+                $indice = (int)($_POST['indice'] ?? -1);
+                $var = ($_POST['var']);
+                if ($indice >= 0) {
+                    if (is_numeric($var)) {
+                        $biblioteca->eliminarLibro($indice);
+                        echo "<p>Libro eliminado correctamente</p>";
+                    } else {
+                        $biblioteca->eliminarRevista($indice);
+                        echo "<p>Revista eliminada correctamente</p>";
+                    }
+                }
+                break;    
+        }
+    }
+}
+?>
 
-// // Imprimir detalles de las revistas
-// echo "Revista 1: " . $revista1->getTitulo() . " de " . $revista1->getAutor() . " (" . $revista1->getAño() . "), " . $revista1->getPaginas() . " páginas, temática: " . $revista1->getTematica() . ".<br>";
-// echo "Revista 2: " . $revista2->getTitulo() . " de " . $revista2->getAutor() . " (" . $revista2->getAño() . "), " . $revista2->getPaginas() . " páginas, temática: " . $revista2->getTematica() . ".<br>";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Publicación</title>
+    <link rel="stylesheet" href="stylobiblioteca.css">
+</head>
+<body>
+    <h1>GESTOR DE  BIBLIOTECA</h1>
+    <form method="post">
+        <input type="hidden" name= "action" value="add"> 
+        
+        <label for="Titulo">Título:</label>
+        <input type="text" id="Titulo" name="Titulo" required>
+       
+        <label for="Autor">Autor:</label>
+        <input type="text" id="Autor" name="Autor" required>
+        
+        <label for="Año">Año:</label>
+        <input type="number" id="Año" name="Año" required>
+        
+        <label for="var">Paginas de libro o Tematica de revista</label>
+        <input type="text" id="var" name="var" required>
+        
+        <button type="submit">Agregar Publicación</button>     
+    </form>
 
+<h2>Listado de Libros</h2>
+<?php if (count($biblioteca->getLibros()) == 0): ?>
+    <p>No hay libros registrados</p>
+<?php else: ?>
+    <ul>
+        <?php foreach ($biblioteca->getLibros() as $indice => $libro): ?>
+            <li>
+                <?php echo "Titulo: " . $libro->getTitulo() . ", Autor: " . $libro->getAutor() . ", Año: " . $libro->getAño() . ", Paginas: " . $libro->getPaginas(); ?>  
+                    <form method="POST" class="delete-form">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="indice" value="<?php echo $indice; ?>">
+                    <input type="hidden" name="var" value="<?php echo $libro->getPaginas(); ?>">
+                    <button type="submit">Eliminar</button>
+                </form>      
+            </li>
+        <?php endforeach; ?>
+    </ul>      
+<?php endif; ?>
 
-// Ejemplo uso del Editor 
-$libro = new Biblioteca();
-$libro->agregarLibro("La caida de los gigantes", "Ken Follet", 2010, 1024);
-$libro->agregarLibro("Harry potter y el prisionero de Azkaban", "J. K. Rowling", 1999, 384);
-$libro->leerLibro();
+<h2>Listado de Revistas</h2>
+<?php if (count($biblioteca->getRevistas()) == 0): ?>
+    <p>No hay revistas registrados</p>
+<?php else: ?>
+    <ul>
+        <?php foreach ($biblioteca->getRevistas() as $indice => $revista): ?>
+            <li>
+                <?php echo "Titulo: " . $revista->getTitulo() . ", Autor: " . $revista->getAutor() . ", Año: " . $revista->getAño() . ", Tematica: " . $revista->getTematica(); ?>  
+                    <form method="POST" class="delete-form">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="indice" value="<?php echo $indice; ?>">
+                    <input type="hidden" name="var" value="<?php echo $revista->getTematica(); ?>">
+                    <button type="submit">Eliminar</button>
+                </form>    
+            </li>
+        <?php endforeach; ?>
+    </ul>      
+<?php endif; ?>
 
+</html>
